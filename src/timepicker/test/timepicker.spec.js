@@ -888,5 +888,29 @@ describe('timepicker directive', function () {
     });
   });
 
+  describe('use inside input element as attribute', function() {
+    beforeEach(function() {
+      $rootScope.time = new Date(2000, 1, 1, 2, 45);
+      element = $compile('<input timepicker ng-model="time" />')($rootScope);
+      $rootScope.$digest();
+    });
+
+    it('capture initial model value', function() {
+      expect(getTimeState(true)).toEqual(['02', '45']);
+    });
+
+    it('does not reset model on value change', function() {
+      var orignalDate = $rootScope.time.toDateString();
+      var minutes = getMinutesButton(false);
+      var hours = getHoursButton(false);
+
+      doClick(minutes, 1);
+      expect($rootScope.time.toDateString()).toBe(orignalDate);
+      
+      doClick(hours, 1);
+      expect($rootScope.time.toDateString()).toBe(orignalDate);
+    });
+  });
+
 });
 
